@@ -1,25 +1,15 @@
-import { useState, useCallback, useEffect, useRef } from "react";
-// useState: For managing and updating component state.
-
-// useCallback: To memoize functions and prevent unnecessary re-creations.
-
-// useEffect: For running side effects like data fetching, event listeners, or DOM updates when dependencies change.
-
-// useRef: For referencing DOM elements or storing values that persist between renders without triggering re-renders.
-
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 
 function App() {
   const [length, setLength] = useState(8);
-  const [numberAllowed, setNumberAllowed] = useState(false);
-  const [characterAllowed, setCharacterAllowed] = useState(false);
+  const [numberAllowed, setNumberAllowed] = useState("false");
+  const [characterAllowed, setCharacterAllowed] = useState("false");
   const [password, setPassword] = useState("");
-
-  const passwordRef = useRef(null);
 
   const copyPassword = () => {
     window.navigator.clipboard.writeText(password);
-    passwordRef.current?.select();
+    alert("Password copied successfuly!");
   };
 
   const generatePassword = useCallback(() => {
@@ -32,32 +22,28 @@ function App() {
       const char = Math.floor(Math.random() * str.length - 1);
       pass += str.charAt(char);
     }
-
     setPassword(pass);
-    // here in dependency array we are passing values which are been check here in useCallback
   }, [length, characterAllowed, numberAllowed]);
 
-  //all the methods that you want to chnage or re-render are pass their varibale name  in dependency array here
   useEffect(() => {
     generatePassword();
-  }, [length, numberAllowed, characterAllowed]);
+  }, [length, characterAllowed, numberAllowed]);
   return (
     <>
-      <div className="w-full max-w-md mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-gray-800  text-orange-500">
+      <div className="w-full max-w-md mx-auto shadow-md rounded-lg px-4 py-3 my-8 bg-gray-800 text-orange-500">
         <h1 className="text-white text-center my-3">Password Generator</h1>
         <div className="flex shadow rounded-lg overflow-hidden">
           <input
             type="text"
-            value={password}
             name=""
             id=""
-            className=" outline-none w-full rounded-l-md bg-white  mt-6 py-1 px-3 read-only:"
+            value={password}
+            className="outline-none w-full rounded-l-md bg-white mt-6 py-1 px-3 read-only"
             readOnly
-            ref={password}
           />
           <button
             onClick={copyPassword}
-            className="rounded-r-md bg-purple-500 py-1 px-3 mt-6 text-white "
+            className="rounded-r-md bg-purple-500 py-1 px-3 mt-6 text-white"
           >
             copy
           </button>
